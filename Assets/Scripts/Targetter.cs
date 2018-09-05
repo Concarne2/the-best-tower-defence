@@ -18,7 +18,7 @@ public class Targetter : MonoBehaviour {
         if (other.CompareTag("Food"))
         {
             targets.Add(other.transform);
-            Debug.Log("Range Enter target #: " + targets.Count);
+           // Debug.Log("Range Enter target #: " + targets.Count);
         }
     }
 
@@ -57,7 +57,7 @@ public class Targetter : MonoBehaviour {
         if (other.CompareTag("Food"))
         {
             targets.Remove(other.transform);
-            Debug.Log("Range Exit target #: " + targets.Count);
+           // Debug.Log("Range Exit target #: " + targets.Count);
         }
     }
 }

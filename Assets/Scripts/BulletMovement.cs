@@ -5,6 +5,8 @@ using UnityEngine;
 public class BulletMovement : MonoBehaviour {
 
     public float speed;
+    public float damageValue;
+    public ParticleSystem bulletImpact;
 
     private Transform target;
     private Rigidbody rb;
@@ -38,8 +40,12 @@ public class BulletMovement : MonoBehaviour {
     {
         if (other.CompareTag("Food"))
         {
-            Destroy(other.gameObject);
+            EnemyHealth health = other.GetComponent<EnemyHealth>();
+            health.TakeDamage(damageValue);
+            ParticleSystem particle= Instantiate(bulletImpact, transform.position, transform.rotation);
+            particle.gameObject.hideFlags = HideFlags.HideInHierarchy;
             gameObject.SetActive(false);
+            Debug.Log("HIT");
         }
     }
 }

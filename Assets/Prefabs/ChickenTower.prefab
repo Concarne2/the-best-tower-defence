@@ -39,7 +39,6 @@ GameObject:
   - component: {fileID: 33582032048881326}
   - component: {fileID: 23753945275200038}
   - component: {fileID: 64147881365375948}
-  - component: {fileID: 114016763845502790}
   - component: {fileID: 114895269682741748}
   m_Layer: 0
   m_Name: ChickenTower
@@ -160,21 +159,6 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 555450ad5876a1b4a87f02765f03e159, type: 3}
---- !u!114 &114016763845502790
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1290174370263896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c432ead306415047b0d4460e53ba971, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pooledObject: {fileID: 1126711694464794, guid: 8ec8ef696cef63d48837b20100e55191,
-    type: 2}
-  pooledAmount: 20
-  willGrow: 1
 --- !u!114 &114077617117512442
 MonoBehaviour:
   m_ObjectHideFlags: 1

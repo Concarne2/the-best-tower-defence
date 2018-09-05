@@ -36,7 +36,7 @@ public class Tower : MonoBehaviour {
         {
             if (myTime > attackInterval)
             {
-                Debug.Log("fire");
+               // Debug.Log("fire");
                 myTime = 0;
                 FireBullet();
             }

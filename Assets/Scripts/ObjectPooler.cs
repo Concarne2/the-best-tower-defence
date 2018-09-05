@@ -38,7 +38,7 @@ public class ObjectPooler : MonoBehaviour {
         {
             if (!pooledObjectList[i].activeInHierarchy)
             {
-                pooledObjectList[i].SetActive(true);
+                return pooledObjectList[i];
             }
         }
         if (willGrow)

@@ -64,7 +64,7 @@ public class EnemyMovement : MonoBehaviour {
     {
         while (!WaypointsManager.instance.IsAtFinalWaypoint(currWaypointIdx))
         {
-            Debug.Log("" + currWaypointIdx);
+            //Debug.Log("" + currWaypointIdx);
             StartCoroutine(MoveTowardsPosition(nextWaypoint.position));
             nextWaypoint = WaypointsManager.instance.GetNextWaypoint(currWaypointIdx);
             currWaypointIdx++;
