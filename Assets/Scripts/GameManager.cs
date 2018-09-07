@@ -7,9 +7,12 @@ public class GameManager : MonoBehaviour {
 
     public GameObject enemy;
     public GameObject chickenTowerGhost;
+    private ChickenGhost ghost;
     public GameObject chickenTower;
+    public GameObject radiusVisualizer;
 
     private bool towerCreation = false;
+    public bool clickTower = false;
     
 
     private void Awake()
@@ -19,10 +22,17 @@ public class GameManager : MonoBehaviour {
         else if (instance != this)
             Destroy(gameObject);
         chickenTowerGhost = Instantiate(chickenTowerGhost, Vector3.zero, Quaternion.identity);
+        ghost = chickenTowerGhost.GetComponent<ChickenGhost>();
         chickenTowerGhost.SetActive(false);
+        radiusVisualizer.SetActive(false);
     }
 
-
+    public void ShowTowerSelected(Tower selectedTower)
+    {
+        radiusVisualizer.transform.position = selectedTower.transform.position;
+        radiusVisualizer.transform.localScale=new Vector3(selectedTower.range*4,selectedTower.range*4,1);
+        radiusVisualizer.SetActive(true);
+    }
 
     void Start () {
         
@@ -43,8 +53,7 @@ public class GameManager : MonoBehaviour {
     public void StartTowerCreation()
     {
         towerCreation = true;
-        Vector3 position= Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
-        chickenTowerGhost.transform.position = position;
+        ghost.SetPositionFromMouse();
         chickenTowerGhost.SetActive(true);
     }
 	
@@ -52,14 +61,16 @@ public class GameManager : MonoBehaviour {
 	void Update () {
         if (towerCreation)
         {
-            chickenTowerGhost.transform.position =
-                Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 5));
+            ghost.SetPositionFromMouse();
 
             if (Input.GetMouseButtonDown(0))
             {
-                towerCreation = false;
-                Instantiate(chickenTower, chickenTowerGhost.transform.position,chickenTowerGhost.transform.rotation) ;
-                chickenTowerGhost.SetActive(false);
+                if (!ghost.cantPlace)
+                {
+                    towerCreation = false;
+                    Instantiate(chickenTower, chickenTowerGhost.transform.position, chickenTowerGhost.transform.rotation);
+                    chickenTowerGhost.SetActive(false);
+                }
             }
         }
 	}

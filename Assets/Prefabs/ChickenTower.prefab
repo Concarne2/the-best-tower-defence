@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4057066645883140}
   - component: {fileID: 136703158478673924}
-  - component: {fileID: 114077617117512442}
   m_Layer: 0
   m_Name: Targetter
   m_TagString: Untagged
@@ -39,10 +38,12 @@ GameObject:
   - component: {fileID: 33582032048881326}
   - component: {fileID: 23753945275200038}
   - component: {fileID: 64147881365375948}
+  - component: {fileID: 54314105436999622}
   - component: {fileID: 114895269682741748}
+  - component: {fileID: 114797859597197556}
   m_Layer: 0
   m_Name: ChickenTower
-  m_TagString: Untagged
+  m_TagString: ChickenTower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,15 +82,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1290174370263896}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -37.9, y: 0, z: -6.6}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -25.4, y: 0, z: 8}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4057066645883140}
   - {fileID: 4498447327504996}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!4 &4498447327504996
 Transform:
   m_ObjectHideFlags: 1
@@ -145,6 +146,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1290174370263896}
   m_Mesh: {fileID: 4300000, guid: 555450ad5876a1b4a87f02765f03e159, type: 3}
+--- !u!54 &54314105436999622
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1290174370263896}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!64 &64147881365375948
 MeshCollider:
   m_ObjectHideFlags: 1
@@ -159,12 +175,12 @@ MeshCollider:
   m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 555450ad5876a1b4a87f02765f03e159, type: 3}
---- !u!114 &114077617117512442
+--- !u!114 &114797859597197556
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1168984799092400}
+  m_GameObject: {fileID: 1290174370263896}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72f611a0d5888604397e95012c77cb70, type: 3}
@@ -183,6 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackInterval: 1
+  turnSpeed: 5
   fireLocation: {fileID: 4498447327504996}
 --- !u!136 &136703158478673924
 CapsuleCollider:

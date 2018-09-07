@@ -4,10 +4,22 @@ using UnityEngine;
 
 public class Targetter : MonoBehaviour {
 
-    public Collider rangeCollider;
+    public CapsuleCollider rangeCollider;
 
     private List<Transform> targets;
 
+    public float range
+    {
+        get
+        {
+            return rangeCollider.radius;
+        }
+
+        set
+        {
+            rangeCollider.radius = range;
+        }
+    }
 
     private void Awake()
     {
@@ -44,6 +56,7 @@ public class Targetter : MonoBehaviour {
             return closestTarget;
         }
     }
+
 
     private void UpdateTargets()
     {
