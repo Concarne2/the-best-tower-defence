@@ -43,14 +43,17 @@ public class Targetter : MonoBehaviour {
         else
         {
             Transform closestTarget = targets[0];
-            float closestDistance = (closestTarget.position - transform.position).sqrMagnitude;
-            for(int i=0;i<targets.Count;i++)
+            if (closestTarget != null)
             {
-                float targetDistance = (targets[i].position - transform.position).sqrMagnitude;
-                if (targetDistance < closestDistance)
+                float closestDistance = (closestTarget.position - transform.position).sqrMagnitude;
+                for (int i = 0; i < targets.Count; i++)
                 {
-                    closestTarget = targets[i];
-                    closestDistance = targetDistance;
+                    float targetDistance = (targets[i].position - transform.position).sqrMagnitude;
+                    if (targetDistance < closestDistance)
+                    {
+                        closestTarget = targets[i];
+                        closestDistance = targetDistance;
+                    }
                 }
             }
             return closestTarget;

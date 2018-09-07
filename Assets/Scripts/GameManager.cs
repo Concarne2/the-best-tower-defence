@@ -1,15 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour {
     public static GameManager instance = null;
 
+    public LayerMask towerLayer;
     public GameObject enemy;
     public GameObject chickenTowerGhost;
     private ChickenGhost ghost;
     public GameObject chickenTower;
     public GameObject radiusVisualizer;
+
+    private GraphicRaycaster gr;
+    private PointerEventData ped;
 
     private bool towerCreation = false;
     public bool clickTower = false;
@@ -25,6 +31,13 @@ public class GameManager : MonoBehaviour {
         ghost = chickenTowerGhost.GetComponent<ChickenGhost>();
         chickenTowerGhost.SetActive(false);
         radiusVisualizer.SetActive(false);
+        ped = new PointerEventData(null);
+    }
+
+    private void Start()
+    {
+        gr = UIManager.instance.towerSelectUI.GetComponent<GraphicRaycaster>();
+        StartCoroutine(Spawn());
     }
 
     public void ShowTowerSelected(Tower selectedTower)
@@ -32,13 +45,32 @@ public class GameManager : MonoBehaviour {
         radiusVisualizer.transform.position = selectedTower.transform.position;
         radiusVisualizer.transform.localScale=new Vector3(selectedTower.range*4,selectedTower.range*4,1);
         radiusVisualizer.SetActive(true);
+        UIManager.instance.ShowTowerSelectUI();
     }
 
-    void Start () {
-        
-        StartCoroutine(Spawn());
-		
-	}
+    private void ClickOnTower()
+    {
+        RaycastHit hit;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 100.0f, towerLayer))
+        {
+            Tower tower = hit.transform.GetComponent<Tower>();
+            if (tower != null)
+            {
+                ShowTowerSelected(tower);
+                towerCreation = false;
+                chickenTowerGhost.SetActive(false);
+                clickTower = true;
+            }
+        }
+        else
+        {
+            clickTower = false;
+            radiusVisualizer.SetActive(false);
+
+            UIManager.instance.HideTowerSelectUI();
+        }
+    }
 
     IEnumerator Spawn()
     {
@@ -59,6 +91,15 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            ped.position = Input.mousePosition;
+            List<RaycastResult> raycastResults = new List<RaycastResult>();
+            gr.Raycast(ped, raycastResults);
+            if (raycastResults.Count > 0)
+                return;
+        }
         if (towerCreation)
         {
             ghost.SetPositionFromMouse();
@@ -71,7 +112,16 @@ public class GameManager : MonoBehaviour {
                     Instantiate(chickenTower, chickenTowerGhost.transform.position, chickenTowerGhost.transform.rotation);
                     chickenTowerGhost.SetActive(false);
                 }
+                else
+                {
+                    ClickOnTower();
+                }
             }
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            ClickOnTower();
         }
 	}
 }

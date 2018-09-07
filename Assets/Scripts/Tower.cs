@@ -26,10 +26,10 @@ public class Tower : MonoBehaviour {
         }
     }
 
-    private void OnMouseDown()
-    {
-        GameManager.instance.ShowTowerSelected(this);
-    }
+    //private void OnMouseDown()
+    //{
+    //    GameManager.instance.ShowTowerSelected(this);
+    //}
 
     private void Awake()
     {

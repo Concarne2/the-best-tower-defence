@@ -15,11 +15,4 @@ public class ChickenButtonScript : MonoBehaviour {
     {
         GameManager.instance.StartTowerCreation();
     }
-
-    
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
