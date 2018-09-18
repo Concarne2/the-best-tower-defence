@@ -5,8 +5,12 @@ using UnityEngine.UI;
 
 public class EnemyHealth : MonoBehaviour {
 
-    public float startingHealth;
+   // public delegate void deathAction();
+  //  public static event deathAction onDeath;
+
     public ParticleSystem deathParticle;
+
+    public EnemyData enemyData;
 
     private float currentHealth;
     private Slider healthBar;
@@ -14,16 +18,27 @@ public class EnemyHealth : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
         healthBar = GetComponentInChildren<Slider>();
-        currentHealth = startingHealth;
-        healthBar.maxValue = startingHealth;
+        currentHealth = enemyData.health;
+        healthBar.maxValue = enemyData.health;
+        UIUpdate();
 	}
+
+    private void OnEnable()
+    {
+        //onDeath += Death;
+    }
+
+    private void OnDisable()
+    {
+       // onDeath -= Death;
+    }
 
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         UIUpdate();
         if (currentHealth <= 0)
-            Death(); 
+            Death();  
     }
 
     public void UIUpdate()
@@ -31,11 +46,13 @@ public class EnemyHealth : MonoBehaviour {
         healthBar.value = currentHealth;
     }
 
-    public void Death()
+    private void Death()
     {
         Destroy(gameObject);
         ParticleSystem particle= Instantiate(deathParticle, transform.position, transform.rotation);
         particle.gameObject.hideFlags= HideFlags.HideInHierarchy;
+        GameManager.instance.addFood(enemyData.foodBounty);
+        GameManager.instance.addMoney(enemyData.moneyBounty);
     }
 	
 	// Update is called once per frame

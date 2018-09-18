@@ -13,9 +13,18 @@ public class GameManager : MonoBehaviour {
     private ChickenGhost ghost;
     public GameObject chickenTower;
     public GameObject radiusVisualizer;
+    public float startingFood;
+    public float goalFood;
+    public int startingMoney;
+    public float foodDecreasePerSecond;
+
+    private float foodSmoother=10;
 
     private GraphicRaycaster gr;
     private PointerEventData ped;
+    public float actualCurrentFood;
+    public float showingCurrentFood;
+    private int currentMoney;
 
     private bool towerCreation = false;
     public bool clickTower = false;
@@ -32,12 +41,28 @@ public class GameManager : MonoBehaviour {
         chickenTowerGhost.SetActive(false);
         radiusVisualizer.SetActive(false);
         ped = new PointerEventData(null);
+        actualCurrentFood = startingFood;
+        showingCurrentFood = startingFood;
+        currentMoney = startingMoney;
     }
 
     private void Start()
     {
         gr = UIManager.instance.towerSelectUI.GetComponent<GraphicRaycaster>();
         StartCoroutine(Spawn());
+        UIManager.instance.SetFoodValue(actualCurrentFood);
+        UIManager.instance.SetMaxFood(goalFood);
+        UIManager.instance.SetMoneyValue(startingMoney);
+    }
+
+    public void addFood(float food)
+    {
+        actualCurrentFood += food;
+    }
+
+    public void addMoney(int money)
+    {
+        currentMoney += money;
     }
 
     public void ShowTowerSelected(Tower selectedTower)
@@ -89,8 +114,26 @@ public class GameManager : MonoBehaviour {
         chickenTowerGhost.SetActive(true);
     }
 	
+    public void GoToVictoryScreen()
+    {
+        Debug.Log("victory");
+    }
+
 	// Update is called once per frame
 	void Update () {
+
+        if (actualCurrentFood >= goalFood)
+        {
+            showingCurrentFood = goalFood;
+            UIManager.instance.SetFoodValue(showingCurrentFood);
+            GoToVictoryScreen();
+            return;
+        }
+
+        actualCurrentFood -= foodDecreasePerSecond * Time.deltaTime;
+        showingCurrentFood = Mathf.Lerp(showingCurrentFood, actualCurrentFood, Time.deltaTime * foodSmoother);
+        UIManager.instance.SetFoodValue(showingCurrentFood);
+        UIManager.instance.SetMoneyValue(currentMoney);
 
         if(Input.GetMouseButtonDown(0))
         {

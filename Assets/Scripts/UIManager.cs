@@ -8,6 +8,8 @@ public class UIManager : MonoBehaviour {
     public static UIManager instance = null;
 
     public Image towerSelectUI;
+    public Slider foodBar;
+    public Text moneyText;
 
     private void Awake()
     {
@@ -30,8 +32,19 @@ public class UIManager : MonoBehaviour {
         towerSelectUI.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    public void SetMaxFood(float food)
+    {
+        foodBar.maxValue = food;
+    }
+
+    public void SetFoodValue(float food)
+    {
+        foodBar.value = food;
+    }
+
+    public void SetMoneyValue(int money)
+    {
+        moneyText.text = "Money: " + money;
+    }
+
 }

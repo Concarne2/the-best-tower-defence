@@ -328,9 +328,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5228a3744d2dc6846a996fbefcfce551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 100
   deathParticle: {fileID: 198701216267766386, guid: 260f5365b3d33fb4e9dc50b39e5bfc2c,
     type: 2}
+  enemyData: {fileID: 11400000, guid: 6751b799739c4e746b8a66e3a0c078c2, type: 2}
 --- !u!114 &114770887786401402
 MonoBehaviour:
   m_ObjectHideFlags: 1

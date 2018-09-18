@@ -38,7 +38,7 @@ public class Targetter : MonoBehaviour {
     {
         UpdateTargets();
 
-        if (targets.Count == 0)
+        if (targets.Count == 0 || transform == null)
             return null;
         else
         {
