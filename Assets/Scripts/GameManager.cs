@@ -9,9 +9,9 @@ public class GameManager : MonoBehaviour {
 
     public LayerMask towerLayer;
     public GameObject enemy;
-    public GameObject chickenTowerGhost;
-    private ChickenGhost ghost;
-    public GameObject chickenTower;
+    //public GameObject chickenTowerGhost;
+    //private TowerGhost ghost;
+    //public GameObject chickenTower;
     public GameObject radiusVisualizer;
     public float startingFood;
     public float goalFood;
@@ -26,6 +26,10 @@ public class GameManager : MonoBehaviour {
     public float showingCurrentFood;
     private int currentMoney;
 
+    private GameObject towerGhostObject;
+    private TowerGhost towerGhost;
+    private GameObject towerToBuild;
+
     private bool towerCreation = false;
     public bool clickTower = false;
     
@@ -36,9 +40,9 @@ public class GameManager : MonoBehaviour {
             instance = this;
         else if (instance != this)
             Destroy(gameObject);
-        chickenTowerGhost = Instantiate(chickenTowerGhost, Vector3.zero, Quaternion.identity);
-        ghost = chickenTowerGhost.GetComponent<ChickenGhost>();
-        chickenTowerGhost.SetActive(false);
+       /* chickenTowerGhost = Instantiate(chickenTowerGhost, Vector3.zero, Quaternion.identity);
+        ghost = chickenTowerGhost.GetComponent<TowerGhost>();
+        chickenTowerGhost.SetActive(false);*/
         radiusVisualizer.SetActive(false);
         ped = new PointerEventData(null);
         actualCurrentFood = startingFood;
@@ -68,7 +72,7 @@ public class GameManager : MonoBehaviour {
     public void ShowTowerSelected(Tower selectedTower)
     {
         radiusVisualizer.transform.position = selectedTower.transform.position;
-        radiusVisualizer.transform.localScale=new Vector3(selectedTower.range*4,selectedTower.range*4,1);
+        radiusVisualizer.transform.localScale=new Vector3(selectedTower.getRange()*4,selectedTower.getRange()*4,1);
         radiusVisualizer.SetActive(true);
         UIManager.instance.ShowTowerSelectUI();
     }
@@ -84,7 +88,7 @@ public class GameManager : MonoBehaviour {
             {
                 ShowTowerSelected(tower);
                 towerCreation = false;
-                chickenTowerGhost.SetActive(false);
+                towerGhostObject.SetActive(false);
                 clickTower = true;
             }
         }
@@ -107,11 +111,19 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void StartTowerCreation()
+    public void StartTowerCreation(GameObject gh, GameObject tow)
     {
+        towerGhostObject = gh;
+        towerGhost = towerGhostObject.GetComponent<TowerGhost>();
+        if (towerGhost == null) return;
+
         towerCreation = true;
-        ghost.SetPositionFromMouse();
-        chickenTowerGhost.SetActive(true);
+        /*ghost.SetPositionFromMouse();
+        chickenTowerGhost.SetActive(true);*/
+
+        towerToBuild = tow;
+        towerGhost.SetPositionFromMouse();
+        towerGhostObject.SetActive(true);
     }
 	
     public void GoToVictoryScreen()
@@ -145,15 +157,15 @@ public class GameManager : MonoBehaviour {
         }
         if (towerCreation)
         {
-            ghost.SetPositionFromMouse();
+            towerGhost.SetPositionFromMouse();
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (!ghost.cantPlace)
+                if (!towerGhost.cantPlace)
                 {
                     towerCreation = false;
-                    Instantiate(chickenTower, chickenTowerGhost.transform.position, chickenTowerGhost.transform.rotation);
-                    chickenTowerGhost.SetActive(false);
+                    Instantiate(towerToBuild, towerGhostObject.transform.position, towerGhostObject.transform.rotation);
+                    towerGhostObject.SetActive(false);
                 }
                 else
                 {

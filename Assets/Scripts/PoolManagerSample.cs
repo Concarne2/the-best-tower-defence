@@ -1,29 +1,46 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
-public class ObjectPooler : MonoBehaviour {
+public class PoolManagerSample : MonoBehaviour
+{
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    #region FIELDS_&_PROPERTIES
 
-
+    static private PoolManagerSample _singleton = null;
+    static private PoolManagerSample singleton
+    {
+        get
+        {
+            if (_singleton == null)
+            {
+                InstantiateSingleton();
+            }
+            return _singleton;
+        }
+    }
     private Dictionary<int, Queue<GameObject>> pool = new Dictionary<int, Queue<GameObject>>();
 
+    #endregion
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    #region MONOBEHAVIOUR_EVENTS
 
-    public static ObjectPooler singleton = null;
-   /* public GameObject[] pooledObject;
-    public string[] codes;
-    public int[] pooledAmount;
-    public bool[] willGrow;
-
-    Dictionary<string, GameObject> pooledObjectList;
-    */
-    // Use this for initialization
-    private void Awake()
+    // <summary> Awake </summary>
+    void Awake()
     {
-        if (singleton == null)
-            singleton = this;
-        else if (singleton != this)
-            Destroy(gameObject);
+        if (_singleton == null)
+        {
+            _singleton = this;
+        }
+        else if (_singleton != this)
+        {
+            Destroy(this);
+        }
     }
+
+    #endregion
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    #region PRIVATE_FUNCTIONS
 
     /// <summary> Adds new prefab instance to pool. </summary>
     private void AddInstanceToPool(GameObject argPrefab)
@@ -74,10 +91,20 @@ public class ObjectPooler : MonoBehaviour {
         return instance;
     }
 
-        /// <summary> Instantiates using pooling system  </summary>
-    static public GameObject InstantiatePooled(GameObject argPrefab, Vector3 argPosition, Quaternion argRotation)
+    // <summary> Instantiate Singleton </summary>
+    static private void InstantiateSingleton()
     {
-        return singleton.GetPooledInstance(argPrefab, argPosition, argRotation);
+        new GameObject("#PoolingManager", typeof(PoolManagerSample));
+    }
+
+    #endregion
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    #region PUBLIC_STATIC_FUNCTIONS
+
+    /// <summary> Instantiates using pooling system  </summary>
+    static public void InstantiatePooled(GameObject argPrefab, Vector3 argPosition, Quaternion argRotation)
+    {
+        singleton.GetPooledInstance(argPrefab, argPosition, argRotation);
     }
     static public void InstantiatePooled<T>(GameObject argPrefab, Vector3 argPosition, Quaternion argRotation, System.Action<T> argAction)
     {
@@ -105,38 +132,6 @@ public class ObjectPooler : MonoBehaviour {
         instance.transform.SetParent(argParentTo, true);
     }
 
-
-    /*
-
-    void Start () {
-        pooledObjectList = new Dictionary<string, GameObject>();
-        for(int i = 0; i < pooledAmount.Length; i++)
-        {
-            for(int j=0;j<pooledAmount[i];j++)
-            {
-                GameObject obj = (GameObject)Instantiate(pooledObject[i]);
-                obj.SetActive(false);
-                pooledObjectList.Add(codes[i],obj);
-            }
-        }
-	}
-
-    public GameObject GetPooledObject(string code)
-    {
-        for(int i = 0; i < pooledObjectList.Count; i++)
-        {
-            if (!pooledObjectList[i].activeInHierarchy)
-            {
-                return pooledObjectList[i];
-            }
-        }
-        if (willGrow)
-        {
-            GameObject obj = (GameObject)Instantiate(pooledObject);
-            pooledObjectList.Add(obj);
-            return obj;
-        }
-        else return null;
-    }
-    */
+    #endregion
+    ///////////////////////////////////////////////////////////////////////////////////////////////
 }

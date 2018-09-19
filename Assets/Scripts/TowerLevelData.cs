@@ -16,16 +16,20 @@ public class TowerLevelData : ScriptableObject {
     public string upgradeDescription;
 
     /// <summary>
-    /// The cost to upgrade to this level
+    /// The cost to build / upgrade to this level
     /// </summary>
     public int cost;
 
     /// <summary>
-    /// The sell cost of the tower
+    /// The sell value of the tower
     /// </summary>
     public int sell;
 
     public float damage;
+
+    public float attackInterval;
+
+    public float range;
 
     /// <summary>
     /// The tower icon

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: EnemyData
   m_EditorClassIdentifier: 
   health: 100
-  foodBounty: 0
-  moneyBounty: 0
+  foodBounty: 10
+  moneyBounty: 10
   moveSpeed: 2

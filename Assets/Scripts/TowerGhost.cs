@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChickenGhost : MonoBehaviour {
+public class TowerGhost : MonoBehaviour {
 
     public Material cantPlaceMaterial;
     private Material ogMaterial;
@@ -17,6 +17,12 @@ public class ChickenGhost : MonoBehaviour {
     private void OnEnable()
     {
         
+    }
+
+    private void OnDisable()
+    {
+        rend.material = ogMaterial;
+        cantPlace = false;
     }
 
     public void SetPositionFromMouse()
