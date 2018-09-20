@@ -45,7 +45,6 @@ public class BulletMovement : MonoBehaviour {
             ParticleSystem particle= Instantiate(bulletImpact, transform.position, transform.rotation);
             particle.gameObject.hideFlags = HideFlags.HideInHierarchy;
             gameObject.SetActive(false);
-            Debug.Log("HIT");
         }
     }
 }

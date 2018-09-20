@@ -2,20 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPooler : MonoBehaviour {
+public class ObjectPoolerv2 : MonoBehaviour
+{
+
+    /*
+    private Dictionary<int, List<GameObject>> pool = new Dictionary<int, List<GameObject>>();
 
 
-    private Dictionary<int, Queue<GameObject>> pool = new Dictionary<int, Queue<GameObject>>();
-
-
-    public static ObjectPooler singleton = null;
-   /* public GameObject[] pooledObject;
-    public string[] codes;
-    public int[] pooledAmount;
-    public bool[] willGrow;
-
-    Dictionary<string, GameObject> pooledObjectList;
-    */
+    public static ObjectPoolerv2 singleton = null;
     // Use this for initialization
     private void Awake()
     {
@@ -26,19 +20,18 @@ public class ObjectPooler : MonoBehaviour {
     }
 
     /// <summary> Adds new prefab instance to pool. </summary>
-    private void AddInstanceToPool(GameObject argPrefab)
+    private GameObject AddInstanceToPool(GameObject argPrefab)
     {
         int instanceID = argPrefab.GetInstanceID();
-        argPrefab.SetActive(false);
         GameObject instance = Instantiate(argPrefab);
-        argPrefab.SetActive(true);
         instance.name = argPrefab.name;
         instance.transform.parent = transform;
         if (pool.ContainsKey(instanceID) == false)
         {
-            pool.Add(instanceID, new Queue<GameObject>());
+            pool.Add(instanceID, new List<GameObject>());
         }
-        pool[instanceID].Enqueue(instance);
+        pool[instanceID].Add(instance);
+        return instance;
     }
 
     /// <summary> Gets pooled instance. </summary>
@@ -48,37 +41,29 @@ public class ObjectPooler : MonoBehaviour {
         GameObject instance = null;
         if (pool.ContainsKey(instanceID) && pool[instanceID].Count != 0)
         {
-            if (pool[instanceID].Peek().activeInHierarchy == false)
+            for (int i = 0; i < pool[instanceID].Count; i++)
             {
-               Debug.Log("inactive");
-                instance = pool[instanceID].Dequeue();
-                pool[instanceID].Enqueue(instance);
-            }
-            else
-            {
-               Debug.Log("active");
-                AddInstanceToPool(argPrefab);
-                instance = pool[instanceID].Dequeue();
-                pool[instanceID].Enqueue(instance);
+                if (!pool[instanceID][i].activeInHierarchy)
+                {
+                    instance = pool[instanceID][i];
+                    instance.transform.position = argPosition;
+                    instance.transform.rotation = argRotation;
+                    instance.SetActive(true);
+                    return instance;
+                }
             }
         }
-        else
-        {
-            AddInstanceToPool(argPrefab);
-            instance = pool[instanceID].Dequeue();
-            pool[instanceID].Enqueue(instance);
-        }
-
+        instance = AddInstanceToPool(argPrefab);
         instance.transform.position = argPosition;
         instance.transform.rotation = argRotation;
         instance.SetActive(true);
 
-        Debug.Log(instance.GetInstanceID());
+        //Debug.Log(instance.GetInstanceID());
 
         return instance;
     }
 
-        /// <summary> Instantiates using pooling system  </summary>
+    /// <summary> Instantiates using pooling system  </summary>
     static public GameObject InstantiatePooled(GameObject argPrefab, Vector3 argPosition, Quaternion argRotation)
     {
         return singleton.GetPooledInstance(argPrefab, argPosition, argRotation);
@@ -108,24 +93,31 @@ public class ObjectPooler : MonoBehaviour {
 
         instance.transform.SetParent(argParentTo, true);
     }
+    */
 
-
-    /*
-
+    public GameObject pooledObject;
+    public int pooledAmount;
+    public bool willGrow;
+    public List<GameObject> pooledObjectList;
+    public static ObjectPoolerv2 singleton = null;
+    private void Awake()
+    {
+        if (singleton == null)
+            singleton = this;
+        else if (singleton != this)
+            Destroy(gameObject);
+    }
     void Start () {
-        pooledObjectList = new Dictionary<string, GameObject>();
-        for(int i = 0; i < pooledAmount.Length; i++)
+        pooledObjectList = new List< GameObject>();
+        for (int i = 0; i < pooledAmount; i++)
         {
-            for(int j=0;j<pooledAmount[i];j++)
-            {
-                GameObject obj = (GameObject)Instantiate(pooledObject[i]);
-                obj.SetActive(false);
-                pooledObjectList.Add(codes[i],obj);
-            }
+            GameObject obj = (GameObject)Instantiate(pooledObject);
+            obj.SetActive(false);
+            pooledObjectList.Add(obj);
         }
 	}
 
-    public GameObject GetPooledObject(string code)
+    public GameObject GetPooledObject()
     {
         for(int i = 0; i < pooledObjectList.Count; i++)
         {
@@ -142,5 +134,5 @@ public class ObjectPooler : MonoBehaviour {
         }
         else return null;
     }
-    */
+    
 }

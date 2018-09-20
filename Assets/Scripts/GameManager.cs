@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviour {
     private TowerGhost towerGhost;
     private GameObject towerToBuild;
 
+    private Tower currentTower;
+
     private bool towerCreation = false;
     public bool clickTower = false;
     
@@ -72,9 +74,35 @@ public class GameManager : MonoBehaviour {
     public void ShowTowerSelected(Tower selectedTower)
     {
         radiusVisualizer.transform.position = selectedTower.transform.position;
-        radiusVisualizer.transform.localScale=new Vector3(selectedTower.getRange()*4,selectedTower.getRange()*4,1);
+        radiusVisualizer.transform.localScale=new Vector3(selectedTower.getRange()*2,selectedTower.getRange()*2,1);
         radiusVisualizer.SetActive(true);
         UIManager.instance.ShowTowerSelectUI();
+        currentTower = selectedTower;
+    }
+
+    public void UpgradeCurrentTower()
+    {
+        if (currentTower)
+        {
+            if (currentTower.IsUpgradable())
+            {
+                if (currentMoney >= currentTower.GetUpgradeCost())
+                {
+                    currentMoney -= currentTower.GetUpgradeCost();
+                    currentTower.UpgradeOneLevel();
+                }
+            }
+        }
+    }
+
+    public void SellCurrentTower()
+    {
+        if (currentTower)
+        {
+            currentTower.SellTower();
+            clickTower = false;
+            radiusVisualizer.SetActive(false);
+        }
     }
 
     private void ClickOnTower()
@@ -139,7 +167,6 @@ public class GameManager : MonoBehaviour {
             showingCurrentFood = goalFood;
             UIManager.instance.SetFoodValue(showingCurrentFood);
             GoToVictoryScreen();
-            return;
         }
 
         actualCurrentFood -= foodDecreasePerSecond * Time.deltaTime;
@@ -164,8 +191,19 @@ public class GameManager : MonoBehaviour {
                 if (!towerGhost.cantPlace)
                 {
                     towerCreation = false;
-                    Instantiate(towerToBuild, towerGhostObject.transform.position, towerGhostObject.transform.rotation);
                     towerGhostObject.SetActive(false);
+
+                    
+                    Tower tower = towerToBuild.GetComponent<Tower>();
+                    if (tower)
+                    {
+                        if (currentMoney>=tower.GetBuildCost())
+                        {
+                            Instantiate(towerToBuild, towerGhostObject.transform.position, towerGhostObject.transform.rotation);
+                            currentMoney -= tower.GetBuildCost();
+                        }
+                    }
+                    
                 }
                 else
                 {

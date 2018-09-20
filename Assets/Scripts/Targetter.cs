@@ -8,17 +8,14 @@ public class Targetter : MonoBehaviour {
 
     private List<Transform> targets;
 
-    public float range
+    public void setRange(float range)
     {
-        get
-        {
-            return rangeCollider.radius;
-        }
+        rangeCollider.radius = range;
+    }
 
-        set
-        {
-            rangeCollider.radius = range;
-        }
+    public float getRange()
+    {
+        return rangeCollider.radius;
     }
 
     private void Awake()

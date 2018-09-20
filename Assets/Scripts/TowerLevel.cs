@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TowerLevel : MonoBehaviour {
-    public float attackInterval;
     public float turnSpeed;
 
     private Targetter targetter;
@@ -16,27 +15,25 @@ public class TowerLevel : MonoBehaviour {
     public Transform fireLocation;
     private float myTime = 0;
 
-    public float range
-    {
-        get
-        {
-            return targetter.range;
-        }
-
-        set
-        {
-            targetter.range = range;
-        }
-    }
-
     private void Awake()
     {
         targetter = GetComponentInChildren<Targetter>();
+        targetter.setRange(levelData.range);
+    }
+
+    public void SetValues()
+    {
+        targetter.setRange(levelData.range);
+        Debug.Log(targetter.getRange());
+        Debug.Log(levelData.range);
+        projectile.GetComponent<BulletMovement>().damageValue = levelData.damage;
     }
 
     private void FireBullet()
     {
-        GameObject bullet = ObjectPooler.InstantiatePooled(projectile, fireLocation.position, fireLocation.rotation);
+        GameObject bullet = ObjectPoolerv2.singleton.GetPooledObject();
+        bullet.SetActive(true);
+        bullet.transform.position = fireLocation.position;
         BulletMovement movement = bullet.GetComponent<BulletMovement>();
         movement.setTarget(target);
     }
@@ -52,9 +49,9 @@ public class TowerLevel : MonoBehaviour {
             Quaternion lookrotation = Quaternion.LookRotation(target.position - transform.position);
             Vector3 dir = Quaternion.Lerp(transform.rotation, lookrotation, Time.deltaTime * turnSpeed).eulerAngles;
             transform.rotation = Quaternion.Euler(0, dir.y, 0);
-            if (myTime > attackInterval)
+            if (myTime > levelData.attackInterval)
             {
-                // Debug.Log("fire");
+                Debug.Log("fire");
                 myTime = 0;
                 FireBullet();
             }
